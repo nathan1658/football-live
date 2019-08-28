@@ -23,7 +23,7 @@
 
 <script>
 import FootballCard from "./components/FootballCard";
-
+import axios from 'axios'
 export default {
   name: "App",
   components: {
@@ -37,6 +37,15 @@ export default {
         away: "away1"
       }
     ]
-  })
+  }),
+  mounted () {
+    axios
+      .get('http://localhost:3000/')
+      .then(response => {
+        this.matches = response.data.IOSBS_XML.Coupons[0].CouponInfo[0].Matches[0].MatchInfo;
+      })
+  }
+
+
 };
 </script>

@@ -1,16 +1,16 @@
 <template>
-  <v-card>
-    <v-card-title>{{match.homeTeam.teamNameCH}} 對 {{match.awayTeam.teamNameCH}}</v-card-title>
+  <v-card min-width="500" class="ma-5">
+    <v-card-title>{{match.$.Home}} 對 {{match.$.Away}}</v-card-title>
     <v-card-text>
-      <span>球賽編號： {{match.matchDay}}{{match.matchNum}}</span>
+      <span>球賽編號： {{match.$.MatchDay}}{{match.$.MatchNum}}</span>
       <br>
-      <span>預定截止投注時間： {{match.matchTime}}</span>
+      <span>預定截止投注時間： {{match.$.MatchDateTime}}</span>
       <v-divider/>
       <v-container>
         <v-row>主客和</v-row>
         <v-row>
           <v-col xs4>
-            <h3>{{match.homeTeam.teamNameCH}} (主隊勝)</h3>
+            <h3>{{match.$.Home}} (主隊勝)</h3>
           </v-col>
 
           <v-col xs4>
@@ -18,53 +18,59 @@
           </v-col>
 
           <v-col xs4>
-            <h3>{{match.awayTeam.teamNameCH}} (客隊勝)</h3>
+            <h3>{{match.$.Away}} (客隊勝)</h3>
           </v-col>
         </v-row>
         <v-row>
           <v-col xs4>
-            <span>{{match.hadodds.H}}</span>
+            <span>{{getTargetOddsInfo("HAD").OddsSet[0].OddsInfo[2].$.Value}}</span>
           </v-col>
 
           <v-col xs4>
-            <span>{{match.hadodds.D}}</span>
+            <span>{{getTargetOddsInfo("HAD").OddsSet[0].OddsInfo[1].$.Value}}</span>
           </v-col>
 
           <v-col xs4>
-            <span>{{match.hadodds.A}}</span>
+            <span>{{getTargetOddsInfo("HAD").OddsSet[0].OddsInfo[0].$.Value}}</span>
           </v-col>
         </v-row>
       </v-container>
 
-      <v-divider/>
+
+     <v-divider/>
       <v-container>
         <v-row>入球大細</v-row>
         <v-row>
           <v-col xs4>
-            <span>球數</span>
+            <h3>球數</h3>
           </v-col>
 
           <v-col xs4>
-            <span>大</span>
+            <h3>大</h3>
           </v-col>
 
           <v-col xs4>
-            <span>細</span>
+            <h3>細</h3>
           </v-col>
         </v-row>
-        <v-row v-for="f in orderedhilodds" :key="f.LINEORDER">
+        <v-row v-for="f in orderedhilodds" >
           <v-col xs4>
-            <span>{{formattedLine(f.LINE)}}</span>
+            <span>{{f.OddsInfo[0].$.Condition}}</span>
           </v-col>
+
           <v-col xs4>
-            <span>{{f.H}}</span>
+            <span>{{f.OddsInfo[0].$.Odds}}</span>
+            
           </v-col>
+
           <v-col xs4>
-            <span>{{f.L}}</span>
+            <span>{{f.OddsInfo[1].$.Odds}}</span>
+            
           </v-col>
         </v-row>
       </v-container>
-      <v-divider/>
+
+ <v-divider/>
 
       <v-container>
         <v-row>角球大細</v-row>
@@ -81,18 +87,21 @@
             <span>細</span>
           </v-col>
         </v-row>
-        <v-row v-for="f in orderedchlodds" :key="f.LINEORDER">
+        <v-row v-for="f in orderedCHLodds" >
           <v-col xs4>
-            <span>{{formattedLine(f.LINE)}}</span>
+            <span>{{f.OddsInfo[0].$.Condition}}</span>
           </v-col>
           <v-col xs4>
-            <span>{{f.H}}</span>
+            <span>{{f.OddsInfo[0].$.Odds}}</span>
+ 
           </v-col>
           <v-col xs4>
-            <span>{{f.L}}</span>
+            <span>{{f.OddsInfo[1].$.Odds}}</span>
+            
           </v-col>
         </v-row>
       </v-container>
+     
       <v-divider/>
     </v-card-text>
   </v-card>
@@ -104,388 +113,2475 @@ export default {
     match: Object
   },
   created: function() {
-    this.match = {
-      matchID: "071eb5ac-0857-462b-9897-1a7d4ca2a035",
-      matchIDinofficial: "20190828WED1",
-      matchNum: "1",
-      matchDate: "2019-08-28+08:00",
-      matchDay: "WED",
-      coupon: {
-        couponID: "5",
-        couponShortName: "WED",
-        couponNameCH: "周三賽事",
-        couponNameEN: "Wednesday Matches"
-      },
-      league: {
-        leagueID: "128",
-        leagueShortName: "AFA",
-        leagueNameCH: "澳洲足總盃",
-        leagueNameEN: "Australian FA Cup"
-      },
-      homeTeam: {
-        teamID: "1156",
-        teamNameCH: "布里斯班獅吼",
-        teamNameEN: "Brisbane Roar"
-      },
-      awayTeam: {
-        teamID: "1153",
-        teamNameCH: "中岸水手",
-        teamNameEN: "Central Coast Mariners"
-      },
-      matchStatus: "Defined",
-      matchTime: "2019-08-28T17:30:00+08:00",
-      statuslastupdated: "2019-08-25T17:44:59+08:00",
-      inplaydelay: "false",
-      neutralgroundvenue: {
-        neutralgroundvenueNameCH: "昆士蘭海豚體育場",
-        neutralgroundvenueNameEN: "Dolphin Stadium, Queensland"
-      },
-      liveEvent: {
-        ilcLiveDisplay: true,
-        hasLiveInfo: false,
-        isIncomplete: false,
-        matchIDbetradar: "",
-        matchstate: "BeforeKickOff",
-        stateTS: "",
-        liveevent: []
-      },
-      cornerresult: "",
-      Cur: "1",
-      hasWebTV: false,
-      hadodds: {
-        A: "100@4.40",
-        D: "100@3.85",
-        H: "100@1.57",
-        ID: "5a84c4a4-c3ba-4210-8dac-d38e613a6b0a",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "true",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      fhaodds: {
-        H: "100@2.05",
-        A: "100@4.55",
-        D: "100@2.38",
-        ID: "ffb0e794-dd7f-426d-8a21-520885604ce3",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      crsodds: {
-        S0104: "100@80.00",
-        S0303: "100@40.00",
-        SM1MD: "100@100.0",
-        S0401: "100@21.00",
-        S0200: "100@8.50",
-        S0204: "100@80.00",
-        S0205: "100@250.0",
-        S0502: "100@80.00",
-        S0004: "100@120.0",
-        SM1MH: "100@28.00",
-        S0500: "100@50.00",
-        S0102: "100@12.00",
-        S0005: "100@400.0",
-        S0202: "100@12.00",
-        S0002: "100@25.00",
-        S0302: "100@17.00",
-        S0101: "100@8.00",
-        S0000: "100@15.00",
-        SM1MA: "100@80.00",
-        S0201: "100@7.00",
-        S0301: "100@11.00",
-        S0001: "100@15.00",
-        S0501: "100@50.00",
-        S0400: "100@25.00",
-        S0103: "100@30.00",
-        S0003: "100@50.00",
-        S0105: "100@250.0",
-        S0203: "100@28.00",
-        S0300: "100@13.00",
-        S0402: "100@35.00",
-        S0100: "100@8.25",
-        ID: "45ade03e-218f-4849-bb0f-209d2aa715cb",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "true",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      fcsodds: {
-        S0501: "100@600.0",
-        S0101: "100@6.50",
-        S0102: "100@23.00",
-        S0302: "100@120.0",
-        S0104: "100@400.0",
-        S0300: "100@22.00",
-        S0303: "100@500.0",
-        S0201: "100@13.00",
-        S0005: "100@1000",
-        S0205: "100@3000",
-        S0202: "100@40.00",
-        S0401: "100@150.0",
-        S0502: "100@1000",
-        S0103: "100@80.00",
-        S0001: "100@6.50",
-        S0301: "100@35.00",
-        S0402: "100@400.0",
-        S0000: "100@3.30",
-        S0004: "100@400.0",
-        SM1MH: "100@600.0",
-        SM1MD: "100@5000",
-        S0204: "100@700.0",
-        S0105: "100@1000",
-        S0002: "100@22.00",
-        SM1MA: "100@1000",
-        S0200: "100@7.50",
-        S0400: "100@80.00",
-        S0500: "100@400.0",
-        S0003: "100@100.0",
-        S0203: "100@200.0",
-        S0100: "100@3.70",
-        ID: "50a97dc7-ceb6-40d0-9de2-ab51565047cc",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      ftsodds: {
-        A: "100@2.62",
-        H: "100@1.47",
-        N: "100@15.00",
-        ID: "cec1a22c-8bd6-49d0-b201-3c8d2141ae1d",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      tqlodds: {
-        A: "100@3.12",
-        H: "100@1.31",
-        ID: "cd500bd8-5e1e-4de8-a453-c84683f96ba0",
-        POOLSTATUS: "Selling",
-        ET: "1",
-        INPLAY: "true",
-        ALLUP: "false",
-        Cur: "1"
-      },
-      ooeodds: {
-        E: "100@1.80",
-        O: "100@1.90",
-        ID: "687c534d-0dee-4e42-b02e-522127b8710d",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      ttgodds: {
-        M7: "100@18.00",
-        P5: "100@7.25",
-        P3: "100@3.65",
-        P1: "100@5.70",
-        P0: "100@15.00",
-        P6: "100@13.00",
-        P4: "100@4.80",
-        P2: "100@3.80",
-        ID: "cfcadff9-c8d1-4ef9-bde2-98a0f18bb055",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      hftodds: {
-        AH: "100@18.00",
-        HA: "100@30.00",
-        DA: "100@10.00",
-        DD: "100@6.20",
-        HH: "100@2.55",
-        DH: "100@4.65",
-        AA: "100@7.00",
-        HD: "100@13.00",
-        AD: "100@13.00",
-        ID: "3615771d-fb08-430c-9a7a-b30cc5c3de78",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      hhaodds: {
-        H: "100@2.60",
-        D: "100@3.45",
-        A: "100@2.20",
-        ID: "cf667f62-dc8c-401d-a35e-83825690b512",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        HG: "-1",
-        AG: "+1",
-        Cur: "1"
-      },
-      hdcodds: {
-        A: "100@1.94",
-        H: "100@1.82",
-        ID: "dd9e3294-a4b6-4c6c-a591-0a832fe7e4e1",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        HG: "-0.5/-1.0",
-        AG: "+0.5/+1.0",
-        Cur: "1"
-      },
-      hilodds: {
-        LINELIST: [
-          {
-            LINENUM: "2",
-            MAINLINE: "true",
-            LINESTATUS: "1",
-            LINEORDER: "2",
-            LINE: "2.5/2.5",
-            L: "100@2.30",
-            H: "100@1.54"
-          },
-          {
-            LINENUM: "3",
-            MAINLINE: "false",
-            LINESTATUS: "1",
-            LINEORDER: "3",
-            LINE: "3.5/3.5",
-            L: "100@1.46",
-            H: "100@2.50"
-          },
-          {
-            LINENUM: "1",
-            MAINLINE: "false",
-            LINESTATUS: "1",
-            LINEORDER: "1",
-            LINE: "2.5/3.0",
-            H: "100@1.68",
-            L: "100@2.05"
-          }
-        ],
-        ID: "6249c4a2-cd73-4ab8-99a8-a5d1a6ef2c1e",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "true",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      fhlodds: {
-        LINELIST: [
-          {
-            LINENUM: "1",
-            MAINLINE: "true",
-            LINESTATUS: "1",
-            LINEORDER: "1",
-            LINE: "1.5/1.5",
-            L: "100@1.57",
-            H: "100@2.25"
-          },
-          {
-            LINENUM: "2",
-            MAINLINE: "false",
-            LINESTATUS: "1",
-            LINEORDER: "2",
-            LINE: "1.0/1.5",
-            L: "100@1.82",
-            H: "100@1.88"
-          },
-          {
-            LINENUM: "3",
-            MAINLINE: "false",
-            LINESTATUS: "1",
-            LINEORDER: "3",
-            LINE: "1.5/2.0",
-            H: "100@2.78",
-            L: "100@1.38"
-          }
-        ],
-        ID: "7a85b6cc-569a-443c-8a72-3253f4b40422",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "false",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      chlodds: {
-        LINELIST: [
-          {
-            LINENUM: "1",
-            MAINLINE: "true",
-            LINESTATUS: "1",
-            LINEORDER: "1",
-            LINE: "10.5/10.5",
-            H: "100@1.90",
-            L: "100@1.80"
-          },
-          {
-            LINENUM: "2",
-            MAINLINE: "false",
-            LINESTATUS: "1",
-            LINEORDER: "2",
-            LINE: "11.5/11.5",
-            L: "100@1.52",
-            H: "100@2.35"
-          }
-        ],
-        ID: "af133a3d-cd2f-4824-90e5-d556153a2974",
-        POOLSTATUS: "Selling",
-        ET: "0",
-        INPLAY: "true",
-        ALLUP: "true",
-        Cur: "1"
-      },
-      hasExtraTimePools: true,
-      results: {},
-      definedPools: [
-        "HAD",
-        "FHA",
-        "CRS",
-        "FCS",
-        "FTS",
-        "TQL",
-        "OOE",
-        "TTG",
-        "HFT",
-        "HHA",
-        "HDC",
-        "HIL",
-        "FHL",
-        "CHL",
-        "NTS"
-      ],
-      inplayPools: ["HAD", "TQL", "HIL", "CHL", "CRS", "NTS"]
-    };
+    // this.match = {
+    //   $: {
+    //     Date: "28/08",
+    //     MatchDateTime: "28-08-2019 20:00",
+    //     MLCKickOff: "1",
+    //     MatchDay: "WED",
+    //     MatchNum: "4",
+    //     MatchID: "f701c5aa-c0e2-491a-af4e-b70650451e2b",
+    //     MatchBDate: "28-08-2019",
+    //     MatchPoolCloseTime: "20:00",
+    //     MatchPoolCloseDate: "28/08",
+    //     Enabled: "1",
+    //     Inplay: "1",
+    //     Opened: "0",
+    //     League: "亞洲聯賽冠軍盃",
+    //     Home: "FC廣州",
+    //     Away: "鹿島鹿角",
+    //     MatchAbandoned: "0",
+    //     MatchConcluded: "0",
+    //     InplayDelay: "0",
+    //     FixedOddsPoolEnabled: "1",
+    //     AllUpEnabled: "1"
+    //   },
+    //   Progress: [
+    //     {
+    //       $: {
+    //         MatchProgress: "PENDING",
+    //         Result: "0:0",
+    //         ResultFull: "",
+    //         Corner: "0",
+    //         CornerFull: "0",
+    //         UpdateDateTime: "",
+    //         MatchProgressEx: "PENDING"
+    //       }
+    //     }
+    //   ],
+    //   TV: [
+    //     {
+    //       Channel: [
+    //         { $: { Code: "671", NameEng: "NOW 671", NameChi: "NOW 671台" } },
+    //         {
+    //           $: { Code: "C652", NameEng: "i-CABLE 652", NameChi: "有線652台" }
+    //         },
+    //         {
+    //           $: { Code: "C612", NameEng: "i-CABLE 612", NameChi: "有線612台" }
+    //         },
+    //         { $: { Code: "FOXP", NameEng: "FOX+", NameChi: "FOX+" } }
+    //       ]
+    //     }
+    //   ],
+    //   Pools: [
+    //     {
+    //       PoolInfo: [
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "HAD",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "1",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Odds: "4.70",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@4.70"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "X",
+    //                     Odds: "3.95",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "X@3.95"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Odds: "1.52",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@1.52"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "FHA",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Odds: "4.65",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@4.65"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "X",
+    //                     Odds: "2.35",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "X@2.35"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Odds: "2.05",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@2.05"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "HHA",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Odds: "2.30",
+    //                     Enabled: "1",
+    //                     Condition: "+1",
+    //                     Value: "2@2.30"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "X",
+    //                     Odds: "3.45",
+    //                     Enabled: "1",
+    //                     Condition: "-1",
+    //                     Value: "X@3.45"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Odds: "2.48",
+    //                     Enabled: "1",
+    //                     Condition: "-1",
+    //                     Value: "1@2.48"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "HDC",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Odds: "2.08",
+    //                     Enabled: "1",
+    //                     Condition: "+0.5/+1",
+    //                     Value: "2@2.08"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Odds: "1.76",
+    //                     Enabled: "1",
+    //                     Condition: "-0.5/-1",
+    //                     Value: "1@1.76"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "HIL",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "1",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               $: { MainLine: "1" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "1.57",
+    //                     Enabled: "1",
+    //                     Condition: "2.5",
+    //                     Value: "H@1.57"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "2.25",
+    //                     Enabled: "1",
+    //                     Condition: "2.5",
+    //                     Value: "L@2.25"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { MainLine: "0" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "1.72",
+    //                     Enabled: "1",
+    //                     Condition: "2.5/3",
+    //                     Value: "H@1.72"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "2.00",
+    //                     Enabled: "1",
+    //                     Condition: "2.5/3",
+    //                     Value: "L@2.00"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { MainLine: "0" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "2.45",
+    //                     Enabled: "1",
+    //                     Condition: "3.5",
+    //                     Value: "H@2.45"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "1.48",
+    //                     Enabled: "1",
+    //                     Condition: "3.5",
+    //                     Value: "L@1.48"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "FHL",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               $: { MainLine: "0" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "1.36",
+    //                     Enabled: "1",
+    //                     Condition: "0.5/1",
+    //                     Value: "H@1.36"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "2.88",
+    //                     Enabled: "1",
+    //                     Condition: "0.5/1",
+    //                     Value: "L@2.88"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { MainLine: "0" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "1.87",
+    //                     Enabled: "1",
+    //                     Condition: "1/1.5",
+    //                     Value: "H@1.87"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "1.83",
+    //                     Enabled: "1",
+    //                     Condition: "1/1.5",
+    //                     Value: "L@1.83"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { MainLine: "1" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "2.20",
+    //                     Enabled: "1",
+    //                     Condition: "1.5",
+    //                     Value: "H@2.20"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "1.59",
+    //                     Enabled: "1",
+    //                     Condition: "1.5",
+    //                     Value: "L@1.59"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "CHL",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "1",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               $: { MainLine: "1" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "1.80",
+    //                     Enabled: "1",
+    //                     Condition: "9.5",
+    //                     Value: "H@1.80"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "1.90",
+    //                     Enabled: "1",
+    //                     Condition: "9.5",
+    //                     Value: "L@1.90"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { MainLine: "0" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "2.25",
+    //                     Enabled: "1",
+    //                     Condition: "10.5",
+    //                     Value: "H@2.25"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "L",
+    //                     Odds: "1.57",
+    //                     Enabled: "1",
+    //                     Condition: "10.5",
+    //                     Value: "L@1.57"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "CRS",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "1",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               $: { Tag: "H" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1:0",
+    //                     Odds: "7.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:0@7.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:0",
+    //                     Odds: "7.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:0@7.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:1",
+    //                     Odds: "6.75",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:1@6.75"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:0",
+    //                     Odds: "11.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:0@11.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:1",
+    //                     Odds: "12.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:1@12.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:2",
+    //                     Odds: "21.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:2@21.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4:0",
+    //                     Odds: "21.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4:0@21.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4:1",
+    //                     Odds: "22.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4:1@22.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4:2",
+    //                     Odds: "40.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4:2@40.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5:0",
+    //                     Odds: "40.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5:0@40.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5:1",
+    //                     Odds: "40.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5:1@40.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5:2",
+    //                     Odds: "80.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5:2@80.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "HO",
+    //                     Odds: "28.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "HO@28.00"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { Tag: "D" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "0:0",
+    //                     Odds: "14.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:0@14.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:1",
+    //                     Odds: "7.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:1@7.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:2",
+    //                     Odds: "13.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:2@13.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:3",
+    //                     Odds: "50.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:3@50.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "DO",
+    //                     Odds: "150.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "DO@150.0"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { Tag: "A" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "0:1",
+    //                     Odds: "14.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:1@14.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:2",
+    //                     Odds: "28.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:2@28.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:2",
+    //                     Odds: "14.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:2@14.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:3",
+    //                     Odds: "80.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:3@80.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:3",
+    //                     Odds: "40.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:3@40.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:3",
+    //                     Odds: "35.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:3@35.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:4",
+    //                     Odds: "300.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:4@300.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:4",
+    //                     Odds: "150.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:4@150.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:4",
+    //                     Odds: "150.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:4@150.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:5",
+    //                     Odds: "800.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:5@800.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:5",
+    //                     Odds: "600.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:5@600.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:5",
+    //                     Odds: "600.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:5@600.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "AO",
+    //                     Odds: "150.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "AO@150.0"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "FCS",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               $: { Tag: "H" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1:0",
+    //                     Odds: "3.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:0@3.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:0",
+    //                     Odds: "7.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:0@7.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:1",
+    //                     Odds: "16.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:1@16.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:0",
+    //                     Odds: "21.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:0@21.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:1",
+    //                     Odds: "50.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:1@50.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:2",
+    //                     Odds: "150.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:2@150.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4:0",
+    //                     Odds: "70.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4:0@70.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4:1",
+    //                     Odds: "150.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4:1@150.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4:2",
+    //                     Odds: "500.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4:2@500.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5:0",
+    //                     Odds: "300.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5:0@300.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5:1",
+    //                     Odds: "500.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5:1@500.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5:2",
+    //                     Odds: "1000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5:2@1000"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "HO",
+    //                     Odds: "600.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "HO@600.0"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { Tag: "D" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "0:0",
+    //                     Odds: "2.95",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:0@2.95"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:1",
+    //                     Odds: "6.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:1@6.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:2",
+    //                     Odds: "60.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:2@60.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3:3",
+    //                     Odds: "600.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3:3@600.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "DO",
+    //                     Odds: "5000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "DO@5000"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { Tag: "A" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "0:1",
+    //                     Odds: "7.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:1@7.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:2",
+    //                     Odds: "27.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:2@27.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:2",
+    //                     Odds: "27.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:2@27.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:3",
+    //                     Odds: "100.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:3@100.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:3",
+    //                     Odds: "100.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:3@100.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:3",
+    //                     Odds: "300.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:3@300.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:4",
+    //                     Odds: "700.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:4@700.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:4",
+    //                     Odds: "700.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:4@700.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:4",
+    //                     Odds: "1000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:4@1000"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "0:5",
+    //                     Odds: "4000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0:5@4000"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1:5",
+    //                     Odds: "4000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1:5@4000"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2:5",
+    //                     Odds: "5000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2:5@5000"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "AO",
+    //                     Odds: "2000",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "AO@2000"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "FTS",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "A",
+    //                     Odds: "2.75",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "A@2.75"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "H",
+    //                     Odds: "1.44",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "H@1.44"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "N",
+    //                     Odds: "14.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "N@14.00"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "TTG",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "0",
+    //                     Odds: "14.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "0@14.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Odds: "5.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@5.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Odds: "3.80",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@3.80"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3",
+    //                     Odds: "3.75",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3@3.75"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4",
+    //                     Odds: "5.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4@5.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5",
+    //                     Odds: "7.25",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5@7.25"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "6",
+    //                     Odds: "12.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "6@12.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "7",
+    //                     Odds: "19.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "7@19.00"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "OOE",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "E",
+    //                     Odds: "1.80",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "E@1.80"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "O",
+    //                     Odds: "1.90",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "O@1.90"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "HFT",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "1",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               $: { Tag: "H" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1-1",
+    //                     Odds: "2.30",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1-1@2.30"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "X-1",
+    //                     Odds: "4.35",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "X-1@4.35"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2-1",
+    //                     Odds: "22.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2-1@22.00"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { Tag: "D" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1-X",
+    //                     Odds: "15.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1-X@15.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "X-X",
+    //                     Odds: "6.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "X-X@6.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2-X",
+    //                     Odds: "15.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2-X@15.00"
+    //                   }
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: { Tag: "A" },
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1-2",
+    //                     Odds: "35.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1-2@35.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "X-2",
+    //                     Odds: "10.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "X-2@10.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2-2",
+    //                     Odds: "8.75",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2-2@8.75"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "SPC",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "0",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0",
+    //             ByItem: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               Question: [
+    //                 {
+    //                   $: {
+    //                     ItemNumber: "1",
+    //                     Text: "那一件事會首先發生在 艾克森 (FC廣州) 身上?"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Answer: "被罰黃牌",
+    //                     Odds: "7.25",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@7.25"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Answer: "被罰紅牌",
+    //                     Odds: "90.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@90.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3",
+    //                     Answer: "入球",
+    //                     Odds: "2.10",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3@2.10"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4",
+    //                     Answer: "被換出",
+    //                     Odds: "5.75",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4@5.75"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5",
+    //                     Answer: "上述事件沒有發生",
+    //                     Odds: "2.28",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5@2.28"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "SPC",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "0",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0",
+    //             ByItem: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               Question: [
+    //                 {
+    //                   $: {
+    //                     ItemNumber: "2",
+    //                     Text: "那一件事會首先發生在 塔利斯卡 (FC廣州) 身上?"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Answer: "被罰黃牌",
+    //                     Odds: "5.25",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@5.25"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Answer: "被罰紅牌",
+    //                     Odds: "100.0",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@100.0"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3",
+    //                     Answer: "入球",
+    //                     Odds: "2.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3@2.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4",
+    //                     Answer: "被換出",
+    //                     Odds: "5.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4@5.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5",
+    //                     Answer: "上述事件沒有發生",
+    //                     Odds: "2.28",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5@2.28"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "SPC",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "0",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0",
+    //             ByItem: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               Question: [
+    //                 {
+    //                   $: {
+    //                     ItemNumber: "3",
+    //                     Text: "那一件事會首先發生在 荷西保連奴 (FC廣州) 身上?"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Answer: "被罰黃牌",
+    //                     Odds: "5.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@5.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Answer: "被罰紅牌",
+    //                     Odds: "70.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@70.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3",
+    //                     Answer: "入球",
+    //                     Odds: "2.45",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3@2.45"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4",
+    //                     Answer: "被換出",
+    //                     Odds: "9.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4@9.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5",
+    //                     Answer: "上述事件沒有發生",
+    //                     Odds: "1.96",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5@1.96"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "SPC",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "0",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0",
+    //             ByItem: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               Question: [
+    //                 {
+    //                   $: {
+    //                     ItemNumber: "4",
+    //                     Text: "那一件事會首先發生在 韋世豪 (FC廣州) 身上?"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Answer: "被罰黃牌",
+    //                     Odds: "5.75",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@5.75"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Answer: "被罰紅牌",
+    //                     Odds: "80.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@80.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3",
+    //                     Answer: "入球",
+    //                     Odds: "3.85",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3@3.85"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4",
+    //                     Answer: "被換出",
+    //                     Odds: "1.52",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4@1.52"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5",
+    //                     Answer: "上述事件沒有發生",
+    //                     Odds: "7.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5@7.50"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "SPC",
+    //             OddsUpdateTime: "12:00",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "0",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0",
+    //             ByItem: "0"
+    //           },
+    //           OddsSet: [
+    //             {
+    //               Question: [
+    //                 {
+    //                   $: {
+    //                     ItemNumber: "5",
+    //                     Text:
+    //                       "那一件事會首先發生在 沙真奴安東尼奧 (鹿島鹿角) 身上?"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsInfo: [
+    //                 {
+    //                   $: {
+    //                     Number: "1",
+    //                     Answer: "被罰黃牌",
+    //                     Odds: "6.25",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "1@6.25"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "2",
+    //                     Answer: "被罰紅牌",
+    //                     Odds: "90.00",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "2@90.00"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "3",
+    //                     Answer: "入球",
+    //                     Odds: "3.40",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "3@3.40"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "4",
+    //                     Answer: "被換出",
+    //                     Odds: "6.50",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "4@6.50"
+    //                   }
+    //                 },
+    //                 {
+    //                   $: {
+    //                     Number: "5",
+    //                     Answer: "上述事件沒有發生",
+    //                     Odds: "1.64",
+    //                     Enabled: "1",
+    //                     Condition: "",
+    //                     Value: "5@1.64"
+    //                   }
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         },
+    //         {
+    //           $: {
+    //             Enabled: "1",
+    //             Pool: "DHCP",
+    //             OddsUpdateTime: "",
+    //             StopSell: "28/08 20:00",
+    //             AllUpFlag: "0",
+    //             SingleFlag: "1",
+    //             InPlayFlag: "0",
+    //             InplayDelay: "0",
+    //             HalfTimeFlag: "0",
+    //             XT: "0",
+    //             InvestmentTotal: "$396,525",
+    //             JackpotGenerated: "$0"
+    //           },
+    //           LegInfo: [
+    //             {
+    //               $: {
+    //                 Date: "28/08",
+    //                 MatchDateTime: "28-08-2019 20:00",
+    //                 MLCKickOff: "1",
+    //                 MatchDay: "WED",
+    //                 MatchNum: "4",
+    //                 MatchID: "f701c5aa-c0e2-491a-af4e-b70650451e2b",
+    //                 Inplay: "0",
+    //                 Opened: "0",
+    //                 League: "亞洲聯賽冠軍盃",
+    //                 Home: "FC廣州",
+    //                 Away: "鹿島鹿角",
+    //                 MatchAbandoned: "0",
+    //                 MatchConcluded: "0",
+    //                 LegNo: "1",
+    //                 MatchInplay: "1"
+    //               },
+    //               Progress: [
+    //                 {
+    //                   $: {
+    //                     MatchProgress: "PENDING",
+    //                     Result: "0:0",
+    //                     UpdateDateTime: "",
+    //                     MatchProgressEx: "PENDING"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsSet: [
+    //                 {
+    //                   $: { Tag: "H" },
+    //                   OddsInfo: [
+    //                     {
+    //                       $: {
+    //                         Number: "1:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "4:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "4:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "4:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "4:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "4:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "4:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "5:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "5:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "5:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "5:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "5:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "5:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "HO",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "HO@"
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 {
+    //                   $: { Tag: "D" },
+    //                   OddsInfo: [
+    //                     {
+    //                       $: {
+    //                         Number: "0:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "DO",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "DO@"
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 {
+    //                   $: { Tag: "A" },
+    //                   OddsInfo: [
+    //                     {
+    //                       $: {
+    //                         Number: "0:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:4",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:4@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:5",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:5@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:4",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:4@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:5",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:5@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:4",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:4@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:5",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:5@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "AO",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "AO@"
+    //                       }
+    //                     }
+    //                   ]
+    //                 }
+    //               ]
+    //             },
+    //             {
+    //               $: {
+    //                 Date: "29/08",
+    //                 MatchDateTime: "29-08-2019 01:00",
+    //                 MLCKickOff: "1",
+    //                 MatchDay: "WED",
+    //                 MatchNum: "5",
+    //                 MatchID: "6a501e9b-d3f8-4d50-992c-82e8a46d45c8",
+    //                 Inplay: "0",
+    //                 Opened: "0",
+    //                 League: "法國甲組聯賽",
+    //                 Home: "里爾",
+    //                 Away: "聖伊天",
+    //                 MatchAbandoned: "0",
+    //                 MatchConcluded: "0",
+    //                 LegNo: "2",
+    //                 MatchInplay: "1"
+    //               },
+    //               Progress: [
+    //                 {
+    //                   $: {
+    //                     MatchProgress: "PENDING",
+    //                     Result: "0:0",
+    //                     UpdateDateTime: "",
+    //                     MatchProgressEx: "PENDING"
+    //                   }
+    //                 }
+    //               ],
+    //               OddsSet: [
+    //                 {
+    //                   $: { Tag: "H" },
+    //                   OddsInfo: [
+    //                     {
+    //                       $: {
+    //                         Number: "1:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "4:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "4:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "4:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "4:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "4:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "4:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "5:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "5:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "5:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "5:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "5:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "5:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "HO",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "HO@"
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 {
+    //                   $: { Tag: "D" },
+    //                   OddsInfo: [
+    //                     {
+    //                       $: {
+    //                         Number: "0:0",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:0@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "3:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "3:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "DO",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "DO@"
+    //                       }
+    //                     }
+    //                   ]
+    //                 },
+    //                 {
+    //                   $: { Tag: "A" },
+    //                   OddsInfo: [
+    //                     {
+    //                       $: {
+    //                         Number: "0:1",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:1@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:4",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:4@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "0:5",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "0:5@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:2",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:2@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:4",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:4@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "1:5",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "1:5@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:3",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:3@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:4",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:4@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "2:5",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "2:5@"
+    //                       }
+    //                     },
+    //                     {
+    //                       $: {
+    //                         Number: "AO",
+    //                         Odds: "",
+    //                         Enabled: "1",
+    //                         Condition: "",
+    //                         Value: "AO@"
+    //                       }
+    //                     }
+    //                   ]
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // };
   },
   methods: {
     formattedLine(val) {
       var arr = val.split("/");
       if (arr[0] == arr[1]) return arr[0];
       return val;
+    },
+    getTargetOddsInfo(val) {
+      return this.match.Pools[0].PoolInfo.filter(function(x) {
+        return x.$.Pool == val;
+      })[0];
     }
   },
   computed: {
     orderedhilodds: function() {
-      return this.match.hilodds.LINELIST.sort(function(x, y) {
-        var a = eval(x.LINE.replace("/", "+"));
-        var b = eval(y.LINE.replace("/", "+"));
+      return this.getTargetOddsInfo("HIL").OddsSet.sort(function(x, y) {
+        var a = eval(x.OddsInfo[0].$.Condition.split('/')[0]);
+        var b = eval(y.OddsInfo[0].$.Condition.split('/')[0]);
         return parseInt(a) - parseInt(b);
       });
     },
-    orderedchlodds: function() {
-      return this.match.chlodds.LINELIST.sort(function(x, y) {
-        var a = eval(x.LINE.replace("/", "+"));
-        var b = eval(y.LINE.replace("/", "+"));
+    orderedCHLodds: function() {
+      var result= this.getTargetOddsInfo("CHL").OddsSet.sort(function(x, y) {
+        var a = eval(x.OddsInfo[0].$.Condition.split('/')[0]);
+        var b = eval(y.OddsInfo[0].$.Condition.split('/')[0]);
         return parseInt(a) - parseInt(b);
       });
+      return result;
     }
   }
 };
