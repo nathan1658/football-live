@@ -2,17 +2,17 @@
   <v-app>
     <v-app-bar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span>Bad11</span>
+        
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text href="https://github.com/vuetifyjs/vuetify/releases/latest" target="_blank">
+      <v-btn v-if="false"  text href="https://github.com/vuetifyjs/vuetify/releases/latest" target="_blank">
         <span class="mr-2">Latest Release</span>
       </v-btn>
     </v-app-bar>
 
     <v-content>
-      <v-container fluid>
+      <v-container fluid ma-5>
         <v-row :align="start">
           <FootballCard   v-for="match in matches" :key="match.matchId" :match="match"/>
         </v-row>
@@ -35,11 +35,6 @@ export default {
         matchId: 12,
         home: "home1",
         away: "away1"
-      },
-      {
-        matchId: 13,
-        home: "home2",
-        away: "away2"
       }
     ]
   })
