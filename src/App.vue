@@ -40,7 +40,7 @@ export default {
   }),
   mounted () {
     axios
-      .get('http://localhost:3000/')
+      .get('https://deepprediction.azurewebsites.net/football/footballxml')
       .then(response => {
         this.matches = response.data.IOSBS_XML.Coupons[0].CouponInfo[0].Matches[0].MatchInfo;
       })
