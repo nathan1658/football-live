@@ -53,7 +53,7 @@
             <h3>細</h3>
           </v-col>
         </v-row>
-        <v-row v-for="f in orderedhilodds" >
+        <v-row v-for="f in orderedhilodds" :key="f.OddsInfo[0].$.Condition">
           <v-col xs4>
             <span>{{f.OddsInfo[0].$.Condition}}</span>
           </v-col>
@@ -76,18 +76,18 @@
         <v-row>角球大細</v-row>
         <v-row>
           <v-col xs4>
-            <span>角球數</span>
+            <h3>角球數</h3>
           </v-col>
 
           <v-col xs4>
-            <span>大</span>
+            <h3>大</h3>
           </v-col>
 
           <v-col xs4>
-            <span>細</span>
+            <h3>細</h3>
           </v-col>
         </v-row>
-        <v-row v-for="f in orderedCHLodds" >
+        <v-row v-for="f in orderedCHLodds" :key="f.OddsInfo[0].$.Condition">
           <v-col xs4>
             <span>{{f.OddsInfo[0].$.Condition}}</span>
           </v-col>
